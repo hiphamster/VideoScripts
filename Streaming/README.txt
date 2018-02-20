@@ -1,7 +1,7 @@
 This folder contains scripts for helping you live stream to sites like Twitch, YouTube, and Picarto.
 
 Scripts:
-    * StreamPi
+    * StreamPi --> Stream to RTMP supported services like Twitch, YouTube, Picarto, etc.
         1. If saving screen capture session as a recording use:
                 /path/to/StreamPi [output.flv]
         2. If streaming live to Twitch, YouTube, Picarto, etc. via RTMP use:

@@ -11,6 +11,7 @@
 # add an alias in my .bashrc file such as:                                            #
 #    alias stream_twitch="/path/to/StreamPi rtmp://..twitch..."                       #
 #    alias stream_youtube="/path/to/StreamPi rtmp://..youtube..."                     #
+# The title comes from the fact it was mainly tested on a Raspberry Pi 3              #
 #######################################################################################
 #
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #Run script from any directory
