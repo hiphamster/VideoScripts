@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+#######################################################################################
+# StreamPi scrpit by TheOuterLinux                                                    #
+#                                                                                     #
+# This script is meant to be used to stream your screen to a service that supports    #
+# RTMP URL's like Twitch, YouTube, Picarto, etc. However, you can also screen         #
+# record to your local hard drive by using /path/to/StreamPi [output.flv]. Otherwise, #
+# either do /path/to/StreamPi [rtmp://...] or change the RTMP variable below to store #
+# your stream's RTMP link for you. Personally, I would leave this srcipt as is and    #
+# add an alias in my .bashrc file such as:                                            #
+#    alias stream_twitch="/path/to/StreamPi rtmp://..twitch..."                       #
+#    alias stream_youtube="/path/to/StreamPi rtmp://..youtube..."                     #
+#######################################################################################
+#
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #Run script from any directory
+#
+#####[Variables - Default/Starting place]#####
+RTMP="$1" #Change and use "rtmp://..." URL to store Twitch RTMP in the script otherwise, 
+#..........you'll have to use "/path/to/script [rtmp://...]" each time. You can also
+#..........Use /path/to/script [file.flv] to screen-record to a local FLV file.
+
+SOUNDSERVER=alsa #If this doesn't work, try using "pulse" instead and double-check pavucontrol's recording section
+#SOUNDDEVICE=defualt #Beware, some systems use "hw:0" (often the microphone) format instead
+
+SCALE="trunc(oh*a/2)*2:720" #Scales screen recording to 720p if screen resolution is too high.
+#............................The "formula" basically prevents "divisable by two" h264 errors.
+QUALITY=23 #(CRF). Don't go lower than 1 (perfect Internet) or higher than 51 (worst Internet).
+#...........Changing this value can help prevent streaming errors at the expense of video quality.
+THREAD_QUEUE=1024 #Needed because some systems can't record audio without it
+
+ANTI_BOTTOM_PANEL=0 #The height of your bottom panel to block from stream; leave at "0" if you don't have one.
+ANTI_TOP_PANEL=0 #The height of your top panel to block from stream; leave at "0" if you don't have one.
+ANTI_LEFT_PANEL=0 #The width of your left panel to block from stream; leave at "0" if you don't have one.
+ANTI_RIGHT_PANEL=0 #The width of your right panel to block from stream; leave at "0" if you don't have one.
+
+#####[Variables - DO NOT EDIT]#####
+SCREENWIDTH="$(xdpyinfo | grep 'dimensions:'|awk '{print $2}'| cut -d \x -f 1)"
+SCREENWIDTH="$(( $SCREENWIDTH - $ANTI_LEFT_PANEL - $ANTI_RIGHT_PANEL ))"
+SCREENHEIGHT="$(xdpyinfo | grep 'dimensions:'|awk '{print $2}' | grep -o x.* | sed 's/x//g')"
+SCREENHEIGHT="$(( $SCREENHEIGHT - $ANTI_BOTTOM_PANEL - $ANTI_TOP_PANEL ))"
+
+#####[Some simple audio checks - DO NOT EDIT]##### --> Still in development
+#echo "Performing audio check..."
+#ALSA="$(aplay -l && echo "OK" || echo "NOK")" #Check if ALSA is running
+#ALSA=$(echo "$ALSA" | grep -o "OK")"
+#PULSE="$(pactl list && echo "OK" || echo "NOK")" #Check if PulseAudio is running
+#PULSE=$(echo "$PULSE" | grep -o "OK")"
+#SOUNDSOURCE="$(-f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i $SOUNDDEVICE)"
+#if [ "$SOUNDSERVER" == "alsa" ] && [ "$ALSA" != "OK" ]
+#then
+#    SOUNDSOURCE=''
+#fi
+#if [ "$SOUNDSERVER" == "pulse" ] && [ "$PULSE" != "OK" ] && [ "$ALSA" == "OK" ]
+#then
+#    SOUNDSOURCE='-f alsa -thread_queue_size $THREAD_QUEUE -ac 2 -i $SOUNDDEVICE'
+#fi
+
+#####[Stream - DO NOT EDIT]#####
+if [ "$SCREENHEIGHT" -gt 720 ] #Screen widths below 720p on a RPi do not need to be scaled
+then
+    ffmpeg -threads $(nproc) -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+    -crf 23 -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
+    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -pass 1 -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+    "$1"
+else
+    ffmpeg -threads $(nproc) -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+    -crf 23 -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
+    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -pass 1 -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+    "$1"
+fi
