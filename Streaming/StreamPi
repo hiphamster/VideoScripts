@@ -60,15 +60,15 @@ SCREENHEIGHT="$(( $SCREENHEIGHT - $ANTI_BOTTOM_PANEL - $ANTI_TOP_PANEL ))"
 #####[Stream - DO NOT EDIT]#####
 if [ "$SCREENHEIGHT" -gt 720 ] #Screen widths below 720p on a RPi do not need to be scaled
 then
-    ffmpeg -threads $(nproc) -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+    ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
     -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
     -crf 23 -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
-    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -pass 1 -f flv -movflags +faststart -profile:v baseline -level 3.0 \
-    "$1"
+    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+    -threads 0 "$1"
 else
-    ffmpeg -threads $(nproc) -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+    ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
     -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
     -crf 23 -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
-    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -pass 1 -f flv -movflags +faststart -profile:v baseline -level 3.0 \
-    "$1"
+    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+    -threads 0 "$1"
 fi
