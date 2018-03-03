@@ -19,10 +19,11 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #Run script from any dir
 #####[Variables - Default/Starting place]#####
 RTMP="$1" #Change and use "rtmp://..." URL to store Twitch RTMP in the script otherwise, 
 #..........you'll have to use "/path/to/script [rtmp://...]" each time. You can also
-#..........Use /path/to/script [file.flv] to screen-record to a local FLV file.
+#..........use /path/to/script [file.flv] to screen-record to a local FLV file.
 
-SOUNDSERVER=alsa #If this doesn't work, try using "pulse" instead and double-check pavucontrol's recording section
-#SOUNDDEVICE=defualt #Beware, some systems use "hw:0" (often the microphone) format instead
+SOUNDSERVER=alsa #Defaults to ALSA because script is meant for RPi, but script down below
+#.................also detects whether or not you are using something else and may change
+#.................automatically to pulse.
 
 SCALE="trunc(oh*a/2)*2:720" #Scales screen recording to 720p if screen resolution is too high.
 #............................The "formula" basically prevents "divisable by two" h264 errors.
@@ -36,26 +37,23 @@ ANTI_LEFT_PANEL=0 #The width of your left panel to block from stream; leave at "
 ANTI_RIGHT_PANEL=0 #The width of your right panel to block from stream; leave at "0" if you don't have one.
 
 #####[Variables - DO NOT EDIT]#####
-SCREENWIDTH="$(xdpyinfo | grep 'dimensions:'|awk '{print $2}'| cut -d \x -f 1)"
+SCREENWIDTH="$(xrandr | grep '*' | awk '{ print $1 }' | tail -n 1 | cut -d \x -f 1)" #If using ext. monitor and laptop open, get ext. monitor width
 SCREENWIDTH="$(( $SCREENWIDTH - $ANTI_LEFT_PANEL - $ANTI_RIGHT_PANEL ))"
-SCREENHEIGHT="$(xdpyinfo | grep 'dimensions:'|awk '{print $2}' | grep -o x.* | sed 's/x//g')"
+SCREENHEIGHT="$(xrandr | grep '*' | awk '{ print $1 }' | tail -n 1 | grep -o x.* | sed 's/x//g')" #If using ext. monitor and laptop open, get ext. monitor height
 SCREENHEIGHT="$(( $SCREENHEIGHT - $ANTI_BOTTOM_PANEL - $ANTI_TOP_PANEL ))"
 
 #####[Some simple audio checks - DO NOT EDIT]##### --> Still in development
-#echo "Performing audio check..."
-#ALSA="$(aplay -l && echo "OK" || echo "NOK")" #Check if ALSA is running
-#ALSA=$(echo "$ALSA" | grep -o "OK")"
-#PULSE="$(pactl list && echo "OK" || echo "NOK")" #Check if PulseAudio is running
-#PULSE=$(echo "$PULSE" | grep -o "OK")"
-#SOUNDSOURCE="$(-f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i $SOUNDDEVICE)"
-#if [ "$SOUNDSERVER" == "alsa" ] && [ "$ALSA" != "OK" ]
-#then
-#    SOUNDSOURCE=''
-#fi
-#if [ "$SOUNDSERVER" == "pulse" ] && [ "$PULSE" != "OK" ] && [ "$ALSA" == "OK" ]
-#then
-#    SOUNDSOURCE='-f alsa -thread_queue_size $THREAD_QUEUE -ac 2 -i $SOUNDDEVICE'
-#fi
+#This is needed because Raspberry Pi's favor ALSA and most other systems are ok with Pulse.
+echo "Performing audio check (ALSA vs. Pulse)..."
+ALSA="$(aplay -l && echo "OK" || echo "NOK")" #Check if ALSA is running
+ALSA="$(echo "$ALSA" | grep -o "OK")"
+PULSE="$(pactl list && echo "OK" || echo "NOK")" #Check if PulseAudio is running
+PULSE="$(echo "$PULSE" | grep -o "OK")"
+SYSTEMTYPE="$(uname -m)"
+if [ "$SYSTEMTYPE" = "i686" ] || [ "$SYSTEMTYPE" = "x86_64" ] && [ "$PULSE" = "OK" ] #Change sound server if not using a Pi
+then
+    SOUNDSERVER=pulse
+fi
 
 #####[Stream - DO NOT EDIT]#####
 if [ "$SCREENHEIGHT" -gt 720 ] #Screen widths below 720p on a RPi do not need to be scaled
@@ -65,6 +63,7 @@ then
     -crf 23 -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
     -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
     -threads 0 "$1"
+    echo $SOUNDSERVER
 else
     ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
     -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
