@@ -11,7 +11,8 @@
 # add an alias in my .bashrc file such as:                                            #
 #    alias stream_twitch="/path/to/StreamPi rtmp://..twitch..."                       #
 #    alias stream_youtube="/path/to/StreamPi rtmp://..youtube..."                     #
-# The title comes from the fact it was mainly tested on a Raspberry Pi 3              #
+# The title comes from the fact it was mainly designed for a Raspberry Pi, but will   #
+# still work on other Linux systems.                                                  #
 #######################################################################################
 #
 #DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #Helps run scripts from any directory
@@ -86,13 +87,13 @@ fi
 if [ "$SCREENHEIGHT" -gt 720 ] #Screen widths below 720p on a RPi do not need to be scaled
 then
     ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
-    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
     -crf 23 -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
     -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
     -threads 0 "$1"
 else
     ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
-    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i :0.0+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
     -crf 23 -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
     -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
     -threads 0 "$1"
