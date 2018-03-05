@@ -16,7 +16,7 @@
 #######################################################################################
 #
 #DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" #Helps run scripts from any directory
-#I included the above commented-out "DIR" varibale just incase I need it. It grabs the
+#I included the above commented-out "DIR" varibale just in-case I need it. It grabs the
 #directory the script is in and makes it easier to work with files relative to the script's
 #location as opposed to having to memorize conventional Linux filesystem structures or $HOME
 #folder pathways. "$DIR" would return "/path/to/folder/script/is/in/"
@@ -31,7 +31,7 @@ SOUNDSERVER=alsa #Defaults to ALSA because script is meant for a Raspberry Pi, b
 #.................may change automatically to pulse.
 #
 SCALE="trunc(oh*a/2)*2:720" #Scales screen recording to 720p if monitor resolution is too high.
-#............................The "formula" basically prevents "divisable by two" h264 errors.
+#............................The "formula" basically prevents "divisible by two" h264 errors.
 #............................If you're using this script on a newer computer, you should be able
 #............................to replace "720" with "1080" for higher resolution.
 QUALITY=23 #(as in CRF value). Don't go lower than 1 (perfect Internet) or higher than 51 (worst Internet).
@@ -86,15 +86,24 @@ fi
 #####[Stream/Record starts here: - DO NOT EDIT]#####
 if [ "$SCREENHEIGHT" -gt 720 ] #Screen widths below 720p on a RPi do not need to be scaled
 then
+    if [ "$SYSTEMTYPE" = "x86_64" ] #Cancels the scaling and CRF value of 1 for x86_64 computers
+    then
+        ffmpeg -vsync 0 -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+        -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+        -crf $QUALITY -preset medium -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
+        -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+        -threads 0 "$1"
+    else #If screen is > 720p but are using ARM or i686 and older then scale
+        ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+        -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
+        -crf $QUALITY -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
+        -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
+        -threads 0 "$1"
+    fi
+else #If screen is equal to or below 720p, no matter what the architecture, use this...
     ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
     -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
-    -crf 23 -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
-    -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
-    -threads 0 "$1"
-else
-    ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
-    -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
-    -crf 23 -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
+    -crf $QUALITY -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
     -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
     -threads 0 "$1"
 fi
