@@ -94,10 +94,10 @@ What you want are two programs called "clamav" and "lynis."
     TheOuterWindows (who's a moron, obviously) decides to stream to Twitch one day. This person fires up OBS Studio on
     Windows 10 because they want to stream WSL, a Linux "emulator," to run something he/she should be doing on a dedicated 
     Linux system. He/she uses their tablet's Twitch app to monitor the stream, which after ~20 seconds of starting shows it 
-    to be a Caucasian female in their early 20s, blonde, cat-styled eyeliner, glasses, pale, and looks somewhere between 
+    to be a Caucasian female in her early 20s, blonde, cat-styled eyeliner, glasses, pale, and looks somewhere between 
     2008 "emo" and 2016 "hipster." This young female is popularly known for her drawing on Photoshop and likes to 
-    slide-show her work in a box in the lower left corner. The chat is on the right-side, but she is using an IRC client 
-    because she can't figure out how to use OBS's web-based stuff:
+    slide-show her work in a box in the lower left corner. The chat is on the right-side, but she is using a pinned IRC client 
+    because she can't figure out how to use OBS's web-based stuff. IRC clients usually have timestamps by default:
     
         [21:23] <example123> Hey TheOuterWindows!
         
@@ -117,7 +117,7 @@ What you want are two programs called "clamav" and "lynis."
         
         [21:34] <profanityguy69> Jamie and Sarah are pretty names. College students?
         [21:35] <example123> Yep. Roommates for two years now.
-        [21:35] <example123> Gotta go. You know how coach is...
+        [21:35] <example123> Gotta go Jamie. You know how coach is about phones during games...
         
         #[Now we know "Jamie" plays sports...
         ~~"I know Sarah. Go score some points! Go team! Why did I have to get in an accident...People driving on the wrong side of
@@ -127,18 +127,18 @@ What you want are two programs called "clamav" and "lynis."
           ..ice daily
           while also revealing what looks like a blue sports banner on the wall behind her.]
           
-        [21:40] <notahacker> Does your boyfriend a streamer too?
+        [21:40] <notahacker> Is your boyfriend a streamer too?
         [21:41] <profanityguy69> Boooooooo!
         
-        ~~"Yes. He's playing Pokemon right now: pkm9000"~~
-        #[As she explains what he streams, Jamie opens her file browser to reveal the username: JMcMillian]
-        #[You, out of curiosity, check out pkm9000's stream, revealing a young male with a British accent]
+        ~~"Yes. He's playing Pokemon right now. Channel is pkm9000"~~
+        #[While she explains what he streams, Jamie opens her file browser to reveal the username: JMcMillian.]
+        #[You, out of curiosity, check out pkm9000's stream, revealing a young male with a British accent.]
         #[Two hours later, you can hear a person come into the room with a bunch of stuff and saying "We won."]
         
-* Can you guess based on the evidence provided in just the span of about 20 minutes who and where TheOuterWindows is?
+* Can you guess who and where TheOuterWindows is?
     1. White Caucasian female --> Appearance and voice
-    2. 20 year old sophomore/junior --> "Yep. Roommates for two years now."
-    3. Plays sports at a college with a blue banner
+    2. 20 year old sophomore/junior --> "Yep. Roommates for two years now." Two years + average age of 18 as a freshman = 20.
+    3. Plays sports at a college with a blue banner; it could be supporting another team, but not likely.
     4. Pill bottle and computer files confirm full name as "Jamie McMillian"
     5. Boyfriend has a British accent
     6. Weather at time of [21:32] is 5 degrees Celsius, not Fahrenheit because of Jamie saying "if it snows," and light rain.
@@ -147,6 +147,16 @@ What you want are two programs called "clamav" and "lynis."
     
     Answer: TheOuterWindows is Jamie McMillian, an American student at Oxford University, living on campus. We know she plays sports 
             and therefore would be even less likely to confuse her with another Jamie. Sports players tend to all live in the same
-            dorm and so we can more easily guess which one. Dorm rooms usually have name tags on them.
-        
-        
+            dorm and so we can more easily guess which one. Dorm rooms usually have name tags on them. The weather of Oxford at 21:32
+            on March 10, 2018 was about 5 degrees Celsius. Some idiots even put !weather commands in their mod bots.
+            
+* Hindsight:
+    All Jamie had to have done was not use her looks and voice to attract views like so many female streamers do, especially the IRL ones.
+    I used a college student in my example because many streamers are college students. Some of of you may say, "What about the IP address?
+    Does hiding myself like a crazy person really matter?" If you are like Jamie, it still matters. This is because most colleges 
+    do not use passwords but registered MAC addresses to decide who connects to their Internet. And, when you do a LAN scan at most schools,
+    the IP addresses are not segregated within each router. Meaning, a LAN scan goes through 192.168.X.X, aka 255*255 = 65,025 possible
+    address over the entire school Internet and even then, there still may be a few buildings Jamie could be in that are seperated from this
+    because perhaps the dorm is older and hasn't been upgraded yet. The only issue with this is that Jamie is in the UK, notorious for passing
+    Internet survellance legislation in the name of "protecting citizens" with no valid proof, so she may be screwed if someone really wanted 
+    to go that far. So, let's do that ICMP/Firewall/Common-sense thing and Happy Streaming!
