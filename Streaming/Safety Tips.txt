@@ -156,7 +156,14 @@ What you want are two programs called "clamav" and "lynis."
     Does hiding myself like a crazy person really matter?" If you are like Jamie, it still matters. This is because most colleges 
     do not use passwords but registered MAC addresses to decide who connects to their Internet. And, when you do a LAN scan at most schools,
     the IP addresses are not segregated within each router. Meaning, a LAN scan goes through 192.168.X.X, aka 255*255 = 65,025 possible
-    address over the entire school Internet and even then, there still may be a few buildings Jamie could be in that are seperated from this
+    address over the entire school Internet and even then, there still may be a few buildings Jamie could be in that are separated from this
     because perhaps the dorm is older and hasn't been upgraded yet. The only issue with this is that Jamie is in the UK, notorious for passing
-    Internet survellance legislation in the name of "protecting citizens" with no valid proof, so she may be screwed if someone really wanted 
-    to go that far. So, let's do that ICMP/Firewall/Common-sense thing and Happy Streaming!
+    Internet surveillance legislation in the name of "protecting citizens" with no valid proof, so she may be screwed if someone really wanted 
+    to go that far. 
+    
+    Another thing to note is phones. Most people use their real name when they setup their devices. The problem with this is
+    that the name you tell it also becomes the hostname of that device. So, as long as a person has the same Internet access as you, a LAN scan
+    can tell a person whether or not you're in the building if the results show something like "JMcMillian." I only mentioning this because
+    some people also stream using mobile devices. Most aren't rooted, and the best thing you can do is use a trusted VPN.
+    
+    So for now, let's do that ICMP/Firewall/Common-sense thing and Happy Streaming!
