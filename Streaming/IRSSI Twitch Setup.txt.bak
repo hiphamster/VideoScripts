@@ -1,0 +1,152 @@
+1. Grab your 0Auth token from here: http://www.twitchapps.com/tmi
+2. Open the file ~/.irssi/config and add the following:
+        {
+          address = "irc.chat.twitch.tv";
+          chatnet = "Twitch";
+          port = "6697";
+          use_ssl = "yes";
+          ssl_verify = "yes";
+          password = "oauth:##############################"
+        }
+        
+    * Replace "oath:###..." with your token.
+    * Most guides say Twitch IRC doesn't support ssl, but that's not true.
+
+3. Join by opening irssi in a terminal and type:
+       1. /connect Twitch
+       2. /join #channelname
+       3. /bye to quit irssi
+    
+4. Because OBS doesn't have native support displaying simple web content for Linux,
+   you may want to log Twitch's IRC and then use OBS Studio's display text file content
+   instead. However, I recommend removing timestamps for more annonymity:
+       1. Open irssi
+       2. /set autolog ON
+       3. /set autolog_path ~/irclogs/%Y/$tag/$0.%m-%d.txt
+       3. /set log_timestamp
+           * To change back to default use /set log_timestamp = %H:%M
+           
+   You should now see a fold that will log all your IRC chats but without timestamps
+   inside a newly created "irclogs" folder inside of $HOME. Logs are as /Year/Node/#channel.mm-dd.txt.
+   You want to be sure to use "txt" instead of "log" because OBS Studio will not take it otherwise.
+           
+####[Twitch Commands for Everyone]####           
+Mods
+This command will display a list of all chat moderators for that specific channel.
+Usage: /mods
+
+Color
+Allows you to change the color of your username. Normal users can choose between Blue, Coral, DodgerBlue, SpringGreen, YellowGreen, Green, OrangeRed, Red, GoldenRod, HotPink, CadetBlue, SeaGreen, Chocolate, BlueViolet, and Firebrick. Twitch Turbo users can use any Hex value (i.e: #000000).
+Usage (Non-Turbo): /color <colorname>
+Usage (Turbo): /color <hex value> or /color <colorname>
+
+Ignore
+This command will allow you to block all messages from a specific user in chat and whispers if you do not wish to see their comments.
+​Usage (chat): /ignore <name>, or click on a username and then on the Ignore button on the user badge that appears.
+Usage (whisper): Click on the cog at the top of the whisper window, and then on “Block <username>”. You’ll be asked to provide one of three reasons for ignoring the user.
+
+Unignore
+This command will allow you to remove users from your ignore list that you previously added.
+Usage: /unignore <name>, or click on the Unignore button which replaces the Ignore button, or type “/unignore <username>”.
+
+Me
+This command will color your text based on your chat name color. Many channels will ban for the use of this as it can be seen as spam so use at your own risk.
+​Usage: /me <text>
+
+Disconnect
+This command will simply disconnect you from the chat server. To reconnect, simply refresh the page.
+Usage: /disconnect
+
+#####[Twitch Broadcaster & Moderator Commands]#####
+Timeout
+This command allows you to temporarily ban someone from the chat room for 10 minutes by default. This will be indicated to yourself and the temporarily banned subject in chat on a successful temporary ban. A new timeout command will overwrite an old one.
+The command also supports banning for a specific set of time via the optional [seconds] value.
+To clear a timeout, either use the Unban command or overwrite the current timeout with a new, 1-second one.
+Usage: /timeout <username> [seconds], or clicking the clock symbol either directly in chat or on the user badge which appears when clicking on a username.
+
+Ban
+This command will allow you to permanently ban a user from the chat room.
+Usage: /ban <username>, or by clicking the Cancel symbol either directly in chat or on the user badge which appears when clicking on a username.
+
+Unban
+This command will allow you to lift a permanent ban on a user from the chat room. You can also use this command to end a ban early; this also applies to timeouts.
+Usage: /unban <username>, or by clicking the Unban button which replaces the Ban button.
+
+Slow
+This command allows you to set a limit on how often users in the chat room are allowed to send messages (rate limiting).
+Usage: /slow <seconds>
+Note: Twitch Partners with a Subscription Button can allow their Subscribers to bypass the slow mode filter if they so wish to do so by going to their dashboard and navigating to their subscriptions tab.
+
+Slowoff
+This command allows you to disable slow mode if you had previously set it.
+Usage: /slowoff
+
+Followers
+This command allows you or your mods to restrict chat to all or some of your followers, based on how long they’ve followed — from 0 minutes (all followers) to 3 months.
+Usage: /followers
+Note: Here are a few example commands, which can be any time up to 3 months:
+
+    /followers 30m, or /followers 30 minutes
+    /followers 2h, or /followers 1 hours
+    /followers 2d, or /followers 2 days
+    /followers 1w, or /followers 1 week
+    /followers 3mo, or /followers 3 months
+
+Followersoff
+This command allows you or your mods to restrict chat to all or some of your followers, based on how long they have followed.
+Usage: /followersoff
+
+Subscribers
+This command allows you to set your room so only users subscribed to you can talk in the chat room. If you don't have the subscription feature it will only allow the Broadcaster and the channel moderators to talk in the chat room.
+Usage: /subscribers
+Note: Subscriptions are a premium feature for select partners that require a paid purchase for the viewer to participate.
+
+Subscribersoff
+This command allows you to disable subscribers only chat room if you previously enabled it.
+Usage: /subscribersoff
+Note: Subscriptions are a premium feature for select partners that require a paid purchase for the viewer to participate.
+
+Clear
+This command will allow the Broadcaster and chat moderators to completely wipe the previous chat history.
+Usage: /clear
+Note: Users with IRC or browser add-ons may not see the chat get wiped due to history saving features and logging.
+
+R9KBeta
+This command disallows users from posting non-unique messages to the channel. It will check for a minimum of 9 characters that are not symbol unicode characters and then purges and repetitive chat lines beyond that. R9K is a unique way of moderating essentially allowing you to stop generic copy-pasted messages intended as spam among over generally annoying content. To find out more about what R9K is, refer to this blog post.
+Usage: /r9kbeta
+
+R9KBetaOff
+This command will disable R9K mode if it was previously enabled on the channel.
+Usage: /r9kbetaoff
+
+Emoteonly
+This command allows you to set your room so only messages that are 100% emotes are allowed.
+Usage: /emoteonly
+
+Emoteonlyoff
+This command allows you to disable emote only mode if you previously enabled it.
+Usage: /emoteonlyoff
+
+#####[Twitch Commands for Broadcaster and Channel Editor]#####
+Commercial
+A partner-only command to run a commercial for all of your viewers.
+Usage (Default: 30 Seconds): /commercial
+Usage (Other Options): /commercial <30|60|90|120|150|180>
+Notes: Specific commercial lengths can only be run if they are available in your dashboard’s gearbox. Commercial commands can also be executed by your appointed editors to run commercials for your channel.
+
+Host
+This command will allow you to host another channel on yours (embedded video player). For more information on the host feature please read the blog post and faq.
+Usage: /host <channel>
+
+Unhost
+Using this command will revert the embedding from hosting a channel and return it to its normal state.
+Usage: /unhost
+
+#####[Twitch Commands for Broadcaster only]#####
+Mod
+This command will allow you to promote a user to a channel moderator allowing them to have access to all of the above commands and features.
+Usage: /mod <username>
+
+Unmod
+This command will allow you to demote an existing moderator back to viewer status (removing their moderator abilities).
+Usage: /unmod <username>
