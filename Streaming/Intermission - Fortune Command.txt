@@ -1,0 +1,16 @@
+Fortune is a program that randomly displays sayings, some of which are really entertaining to read.
+This makes fortune a neat idea for "intermission" or "brb" instances while away from the computer.
+
+Using Linux (Debian-based) install via:
+$sudo apt install fortune-mod fortunes fortunes-min
+
+Run:
+$watch -t -n 30 fortune
+
+This will display a random fortune every 30 seconds.
+
+If you are running OBS Studio, you could run as:
+$watch -t -n 30 fortune > fortune.txt
+
+This will allow you to display the text inside the fortune.txt file rather than having OBS Studio
+annoyingly confuse terminals when window capturing.
