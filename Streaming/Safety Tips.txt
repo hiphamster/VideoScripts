@@ -68,8 +68,7 @@ What you want are two programs called "clamav" and "lynis."
 
 #####[IRC]#####
 * Twitch supports IRC, which means you may be tempted to use a program such as irssi or hexchat to display the chat in
-  your stream. You should disable timestamps, if you can, to avoid timezone info. If can't disable but change the format,
-  try to use GMT.
+  your stream. You should disable timestamps, if you can, to avoid timezone info.
   
 #####[Biometrics]#####
 * You're not going to like this, but:
@@ -91,7 +90,7 @@ What you want are two programs called "clamav" and "lynis."
     16. Avoid politics
     17. Avoid religion
     
-* Let me give you a hypothetical (no names mentioned are real):
+* Let me give you a hypothetical (no people mentioned are real):
     TheOuterWindows (who's a moron, obviously) decides to stream to Twitch one day. This person fires up OBS Studio on
     Windows 10 because they want to stream WSL, a Linux "emulator," to run something he/she should be doing on a dedicated 
     Linux system. He/she uses their tablet's Twitch app to monitor the stream, which after ~20 seconds of starting shows it 
