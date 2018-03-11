@@ -1,5 +1,6 @@
 This is more about Streaming safety, security, and Firewall related for Linux
-for live streaming to services such as Twitch, YouTube, Picarto, etc.
+when live streaming to services such as Twitch, YouTube, Picarto, etc. This is
+mainly focused on your computer and not the actual online accounts themselves.
 
 #####[Block ICMP Request]#####
 Doing so prevents your system from being "pingable."
@@ -17,9 +18,76 @@ $sysctl -p
 If you have UFW installed, add to [/etc/ufw/before.rules]:
     -A ufw-before-input -p icmp --icmp-type echo-request -j DROP
     
+#####[Disable ipv6]#####
+ipv4 accupies most of the Internet traffic; hardley anyone actually uses ipv6 but is available on
+most systems as "automatic" by default. Many sources believe that ipv6 is terrible for security
+and privacy. ipv6 by default incorporates hardware MAC address and even some VPN's use ipv6
+for whatever reason which makes it just about useless. Matter of fact, if a website tries to get
+you to use ipv6, when you purchase a product for example, your real identity from the card and
+the computer you used to purchase the product are now linked because most websites and services,
+Twitch/YouTube/Picarto/etc., record that information if it can get it. Please also see the
+[Spoof Ethernet Mac Address] section further below.
+
+WARNING: If you use SSH, you may get X11 forwarding errors.
+
+Edit the file /etc/sysctl.conf
+Add:
+    #IPV6 disabled
+    net.ipv6.conf.all.disable_ipv6 = 1
+    net.ipv6.conf.default.disable_ipv6 = 1
+    net.ipv6.conf.lo.disable_ipv6 = 1
+Run:
+$sudo sysctl -p
+    *The contents of /proc/sys/net/ipv6/conf/all/disable_ipv6 should change from a "0" to a
+     "1"; if not, keep going anyway...
+    
+Open NetWorkManager (most Linux systems use it):
+    Edit connections...--> Click on internface and Edit ---> IPV6 Settings ---> Method: Ignore
+    
+Disable on the kernel level:
+echo 'blacklist ipv6' | sudo tee -a '/etc/modprobe.d/blacklist.local' >/dev/null
+
+Prevent at boot by editing GRUB:
+$sudo nano /etc/default/grub
+
+Find the line that contains "GRUB_CMDLINE_LINUX_DEFAULT":
+Example: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+
+Add "ipv6.disable=1" to the boot option, then save your grub file:
+Example: GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet splash"
+
+Finally, update grub:
+$sudo update-grub
+
+Reboot and test if available with:
+$test -f /proc/net/if_inet6 && echo "Running kernel is IPv6 ready"
+
+
 #####[UFW (Uncomplicated Firewall)]#####
 $sudo ufw default deny incoming
 $sudo ufw default allow outgoing
+
+#####[Spoof Ethernet Mac Address]#####
+If you are like many Linux users, you have NetworkManager installed. You are also more than likely using
+an Ethernet connection for the stream. Spoofing your MAC address is much the same as changing a web 
+browser's user-agent but on a hardware level. This is important because nearly all websites record a
+person's hardware MAC address if they can get it. That means even if you "John Doe" an account and then
+later become partner and have to give the service your real information, that hardware's MAC address
+is now forever on their servers associated with your real identity.
+
+To randomly spoof your Ethernet Mac address:
+Edit connections... --> Choose the interface and Edit--> Ethernet tab --> Cloned Mac address --> Random.
+
+If you cannot do it this way, try to install and use a program called "macchanger."
+During the install, it will ask you if you would like your MAC address changed automatically
+each time an interface (Ethernet/WiFi) is up and running just like the method above will.
+
+#####[Turn on address verification]#####
+Source address verification is a kernel-level feature that drops packets pretending to come from your network. 
+It uses the reverse path filter method to check whether the source of the received packet is reachable through 
+the interface it came in. This may actually be on by default, but doesn't hurt to check anyway.
+
+$echo 1 > /proc/sys/net/ipv4/conf/default/rp_filter
 
 #####[SSH]#####
 If you must use SSH, do the following to better protect yourself:
@@ -37,6 +105,17 @@ If you must use SSH, do the following to better protect yourself:
   so hostname.local makes more sense to use instead. However, I highly recommend disabling all SSH, VNC,
   SAMBA, remote desktop, etc. for security reasons if you are just using your Linux box as a normal desktop.
   
+####[Wake On LAN]#####
+Wake On LAN allows supported computers to be woken from suspension via SSH. If you are a "streamer," you
+will probably be using a desktop and therefore I more than likely to suspend your computer than to actually
+turn it off and unplug the Ethernet cable like you should.
+
+To check status:
+$sudo ethtool eth0 | grep Wake
+
+To disable:
+$sudo ethtool -s eth0 wol d
+  
 #####[fail2ban]#####
 Whether or not you use SSH, it wouldn't hurt to install fail2ban. It's a process that runs in the background
 and after so many failed attempts of remote logging into you computer, it adds their attacker's IP address
@@ -50,7 +129,8 @@ https://www.linux.com/learn/lock-your-untrusted-applications-firejail
 #####[Malware and Rootkit scanning]#####
 If you're running Linux, this usually isn't much of a concern, but it never hurts to take precautions.
 If nothing else, don't be a virus "carrier" if you share files with Windows users.
-What you want are two programs called "clamav" and "lynis."
+What you want are two programs called "clamav" and "lynis." Read the man pages for "clamscan," "freshclam,"
+and "lynis" for help.
     
 #####[Conky]#####
 * Disable all time, date, and weather info. You don't need it and it'll only help give your location away.
@@ -72,23 +152,23 @@ What you want are two programs called "clamav" and "lynis."
   
 #####[Biometrics]#####
 * You're not going to like this, but:
-    1. Never show your face
-    2. Never use your voice
-    3. Don't give out your real name, even to the stream service
-    4. Do not tell your real-life friends about your stream
-    5. Do not leave your hands on sensitive mouse while thinking
-    6. Avoid giving out system information, even though you want to "show-off"
-    7. Do not use drawing tablets to write anything beyond a username signature on artwork
-    8. Do not stream yourself logging into any website
-    9. Do not talk about where you're from or currently streaming
-    10. Do not mention your gender
-    11. Do not mention your age
-    12. If you are going to talk about hobbies, keep them stereotypical to your "brand" as much as possible
-    13. Do not mention mental or physical health
-    14. Do not mention family members; only say you "have a friend"
-    15. Do not mention financial or college related issues
-    16. Avoid politics
-    17. Avoid religion
+    1. Never show your face.
+    2. Never use your voice.
+    3. Don't give out your real name, even to the stream service.
+    4. Do not tell your real-life friends about your stream.
+    5. Do not leave your hands on a mouse while thinking; you may do something stupid by accident.
+    6. Avoid giving out system information, even though you want to "show-off."
+    7. Do not use drawing tablets to write anything beyond a username signature on artwork.
+    8. Do not stream yourself logging into any website.
+    9. Do not talk about where you're from or currently streaming.
+    10. Do not mention your gender.
+    11. Do not mention your age.
+    12. If you are going to talk about hobbies, keep them stereotypical to your "brand" as much as possible.
+    13. Do not mention mental or physical health.
+    14. Do not mention family members; only say you "have a friend."
+    15. Do not mention financial or college related issues.
+    16. Avoid politics.
+    17. Avoid religion.
     
 * Let me give you a hypothetical (no people mentioned are real):
     TheOuterWindows (who's a moron, obviously) decides to stream to Twitch one day. This person fires up OBS Studio on
