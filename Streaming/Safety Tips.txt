@@ -59,7 +59,7 @@ Example: GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet splash"
 Finally, update grub:
 $sudo update-grub
 
-Reboot and test if available with:
+Reboot and test if available with; will be blank if disabled:
 $test -f /proc/net/if_inet6 && echo "Running kernel is IPv6 ready"
 
 
