@@ -26,9 +26,11 @@
        3. /set log_timestamp
            * To change back to default use /set log_timestamp = %H:%M
            
-   You should now see a fold that will log all your IRC chats but without timestamps
+   You should now see a folder that will log all your IRC chats but without timestamps
    inside a newly created "irclogs" folder inside of $HOME. Logs are as /Year/Node/#channel.mm-dd.txt.
    You want to be sure to use "txt" instead of "log" because OBS Studio will not take it otherwise.
+   Also, it might be a good idea to have a second IRC client running with timestamp logging just
+   for you to review and to have proof of something if needed.
            
 ####[Twitch Commands for Everyone]####           
 Mods
