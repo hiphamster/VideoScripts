@@ -1,0 +1,2 @@
+Grab latest Tweet of a specified user:
+curl -s https://decapi.me/twitter/latest?name=USERNAME

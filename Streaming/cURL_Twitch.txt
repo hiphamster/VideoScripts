@@ -1,0 +1,21 @@
+This is a list of curl URL's to get various information regarding Twitch channels.
+Most Unix/Linux systems have curl installed.
+---------------------------------------------------------------------------------
+
+Retrive who's watching/modding information:
+$curl -s "https://tmi.twitch.tv/group/user/CHANNELNAME/chatters" | less
+
+Retrieve latest follower from a channel:
+$curl -s https://decapi.me/twitch/followers?channel=CHANNELNAME
+
+Follower count:
+$curl -s https://decapi.me/twitch/followcount/CHANNELNAME
+
+Subscriber count:
+$curl -s https://decapi.me/twitch/subcount?channel=CHANNELNAME
+
+Uptime:
+curl -s https://decapi.me/twitch/uptime?channel=CHANNELNAME
+
+Gets the latest highlight title and URL if exists:
+curl -s https://decapi.me/twitch/hightlight?channel=CHANNELNAME

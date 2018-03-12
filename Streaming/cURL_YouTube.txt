@@ -1,0 +1,5 @@
+Grab the latest YouTube video title and URL by channel ID:
+curl -s https://decapi.me/youtube/latest_video?id=CHANNEL_ID
+
+Grab the latest YouTube video title and URL by username:
+curl -s https://decapi.me/youtube/latest_video?user=USERNAME
