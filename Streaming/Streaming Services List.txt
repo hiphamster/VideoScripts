@@ -1,0 +1,125 @@
+Last updated Mar 15, 2018, 00:12:07
+
+This is a list of streaming services and some information about each.
+It's not a complete list, but I tried to find as many free and easy 
+to use streaming services as I could.
+
+[Twitch] *Warning - Owned by Amazon*
+    https://twitch.tv
+    Score: 10
+    Primary languages: Enlgish
+    tags: video games, Esports, art, drawing, 3D, IRL (In Real Life), music, ASMR
+    Web browser friendly
+    MPV+youtube-dl friendly
+    Apps for both iOS, Android, desktop, and game systems
+    Supports IRC for chat and commands
+    
+[YouTube] *Warning - Owned by Google*
+    https://youtube.com/live
+    Score: 9
+    Primary language: English
+    tags: video games, Esports, art, drawing, 3D, IRL (In Real Life), music, ASMR
+    Web browser friendly
+    MPV+youtube-dl friendly
+    Apps for iOS, Android, desktop, and game systems
+    Does not support IRC but has a pop-out chat option on the page
+    
+[DailyMotion]
+    https://www.dailymotion.com/live
+    Score: 8
+    Primary language: French
+    tags: news, sports, podcast, video games
+    Web browser friendly
+    MPV+youtube-dl friendly
+    Apps for iOS and Android
+    No IRC however, it has amazing curl support https://developer.dailymotion.com/guides/livestreaming.
+    
+[Mixer (formally known as "Beam")] *WARNING - Owned by Microsoft*
+    https://mixer.com
+    Score: 7
+    Primary language: English
+    tags: video games, Microsoft, Xbox, Windows
+    Web browser friendly, though if you do use NoScripts you will have to enable microsoft.com JS
+    MPV+youtube-dl friendly
+    Apps for iOS, Android, Windows 10, and Xbox
+    No IRC but you can build a chat bot: https://dev.mixer.com/tutorials/chatbot.html
+    
+[PSCP]
+    https://pscp.tv
+    Score: 7
+    Primary language: World
+    tags: news, IRL (In Real Life), podcast, dicussion, art, music, travel
+    Sort of web browser friendly but only because it's incredibly riddled with JS effects and the interface response is terrible
+    MPV+youtube-dl friendly <--Why it's listed higher
+    Apps for iOS and Android
+    No IRC
+    
+[Stream.me]
+    https://stream.me
+    Score: 7
+    Primary language:
+    tags: video games, IRL (In Real Life), music
+    Web browser friendly
+    MPV+youtube-dl fails
+    App for Android
+    No IRC
+    
+[GoodGame]
+    https://goodgame.ru
+    Score: 7
+    Primary language: Russian
+    tags: video games
+    Web browser friendly
+    MPV+youtube-dl fails
+    Apps for iOS and Android
+    No IRC but, there are chat applications that support it; TwoRatChat, RutonyChat, StreamChat, BroCha, and Failchat; See: https://goodgame.ru/topic/67532/
+    
+[Chew]
+    https://chew.tv
+    Score: 7
+    Primary language: Techno
+    tags: DJ, music, techno, hip-hop, trance,
+    Web browser friendly
+    MPV+youtube-dl fails
+    No Chew apps, but was aquired by BandLab and maybe one eventually
+    No IRC
+    
+[Cybergame] *Warning - Uses some Microsoft Azure cloud serves; will be moving completely soon*
+    https://cybergame.tv
+    Score: 6
+    Primary language: Russian
+    tags: video games
+    Web browser friendly
+    MPV+youtube-dl fails
+    Apps for Android and APK for Windows Phone
+    No IRC information or chat bots found
+    
+[Smashcast]
+    https://smashcast.tv
+    Score: 5
+    Primary language: English
+    tags: video games, podcast, IRL (In Real Life), Esports
+    Web browser video freindly but the sound produced very low pitched audio on all streams
+    MPV+youtube-dl gives "Failed to open..." error
+    Apps for iOS and Android
+    I think it supports IRC, but no clear tutorial found; https://help.smashcast.tv/customer/en/portal/articles/2780285-the-smashcast-chat-interface
+    
+[CaveTube]
+    https://www.cavelis.net/
+    Score: 5
+    Primary language: Japanese
+    tags: art, drawing, manga, video games
+    Web browser friendly but requires peer-assist networking
+    MPV+youtube-dl fails
+    No apps
+    No IRC
+    
+[Picarto]
+    https://picarto.tv
+    Score: 4
+    Primary languages: Japanese, Korean, English, Chinese
+    tags: art, drawing, manga, 3D, creative
+    Sort of web browser friendly if you don't have any adblock/NoScript add-ons
+    MPV+youtube-dl will play a quick audio file and then quit
+    Apps for iOS and Android but have terrible reviews (justifiably so)
+    Does not support IRC but has an npm chat bot: npm i picarto-chat-bot
