@@ -1,9 +1,14 @@
 #!/bin/bash
+#####[Remove older FFmpeg version]#####
+sudo apt purge ffmpeg
+sudo rm -rf /usr/share/ffmpeg
+sudo rm -rf /usr/share/man/man1/ffmpeg.1
+sudo rm -rf /usr/local/bin/ffmpeg
 #####[Install dependencies]#####
 sudo apt install yasm libsdl2-dev libomxil-bellagio-dev libzvbi-dev libxvidcore-dev libx265-dev libx264-dev libwebp-dev libwavpack-dev libvorbis-dev libtwolame-dev libtheora-dev libspeex-dev libsoxr-dev libsnappy-dev libshine-dev librubberband-dev libpulse-dev libopenjp2-7-dev libopencv-dev libmp3lame-dev libgsm-tools libgsm1-dev libfribidi-dev libcaca-dev frei0r-plugins-dev
-#####[Grab latest FFMPEG source code and compile]#####
+#####[Grab latest FFmpeg source code and compile]#####
 git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
 cd ffmpeg
-./configure --prefix=/usr --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-libcaca --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgsm --enable-libmp3lame --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxvid --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-frei0r --enable-libx264 --enable-shared --enable-version3 --disable-doc --disable-programs
-make
+./configure --prefix=/usr --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-avresample --enable-avisynth --enable-libcaca --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgsm --enable-libmp3lame --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxvid --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-frei0r --enable-libx264 --enable-shared --enable-nonfree --enable-indev=sndio --enable-outdev=sndio --enable-indev=alsa --enable-outdev=alsa --enable-indev=pulse --enable-outdev=pulse --enable-gpl
+make 
 sudo make install
