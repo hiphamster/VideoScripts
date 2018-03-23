@@ -62,6 +62,9 @@ $sudo update-grub
 Reboot and test if available with; will be blank if disabled:
 $test -f /proc/net/if_inet6 && echo "Running kernel is IPv6 ready"
 
+You can verify that it's blocked by using:
+$ping6 google.com
+
 
 #####[UFW (Uncomplicated Firewall)]#####
 $sudo ufw default deny incoming
