@@ -17,7 +17,7 @@ Scripts:
                 a. Checks if you wanted an overlay image based on a variable ($2)
                 b. Grabs the screen/monitor width and height
                 c. If you want an overlay image, resize a copy of the image to match screen 
-                   resolution.
+                   resolution. See ExampleOverlay.png to get an idea.
                 d. Checks a variable to see if you want multiple monitor (spans width) recording.
                    The default is set to "N" for "no" to only stream/record the primary display.
                 e. Checks whether or not you are using a Raspberry Pi or running JACK to choose
