@@ -65,6 +65,47 @@ $test -f /proc/net/if_inet6 && echo "Running kernel is IPv6 ready"
 You can verify that it's blocked by using:
 $ping6 google.com
 
+#####[Turn off rcpbind and remove NFS]#####
+You only need this if you use NFS for file sharing. The benefit of NFS is that it allows file sharing
+between Linux and UNIX computers to mount without authentication at boot. That's great if you want to 
+use a centralized home directory system so that all your computers have the same home directory folder,
+but most of us aren't that hard-up for it, so it's just better to remove and disbale in the mean time.
+Plus, you can kind of see the security issues with that, right?
+
+$sudo update-rc.d nfs-common disable
+$sudo update-rc.d rpcbind disable
+$sudo systemctl stop rpcbind.service
+$sudo systemctl disable rpcbind.service
+$sudo apt purge nfs-*
+
+#####[Disbale SAMBA]#####
+SAMBA is like NFS, but mainly geared towards file sharing between Linux/UNIX and Windows/DOS.
+I would like to completely remove related packages but weirdly enough, a lot of emulators and programs
+like Kodi or MPV depend on it. So, here's what you do instead:
+
+$sudo service smbd stop
+$sudo update-rc.d -f smbd remove
+
+#####[Disable NMB]#####
+
+$sudo service nmbd stop
+$sudo update-rc.d -f nmbd remove
+
+#####[Remove the avahi-daemon]#####
+Avahi is a system which enables programs to publish and discover services and hosts running on a local network. 
+For example, a user can plug a computer into a network and have Avahi automatically advertise the network services 
+running on its machine. Avahi's "ihavA" advertisement results in adding user access to PRINTERS, files and other
+networked services. So if you use you printer wirelessly, do not do this.
+
+$sudo apt purge avahi-daemon
+
+#####[Removing NTP]#####
+NTP is basically a service that talks to a server and then uses the time it got to set your computer's clock
+automatically for you. Because most computers either ask you at install about setting your time or have
+NTP running at boot, there's no real need to keep it after your clock is set because your computer should
+have it's own internal clock keeping stuff for when you poweroff.
+
+$sudo apt purge ntp
 
 #####[UFW (Uncomplicated Firewall)]#####
 $sudo ufw default deny incoming

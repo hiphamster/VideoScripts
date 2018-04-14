@@ -5,6 +5,9 @@ Most Unix/Linux systems have curl installed.
 Retrive who's watching/modding information:
 $curl -s "https://tmi.twitch.tv/group/user/CHANNELNAME/chatters" | less
 
+Get viewer count:
+$curl -s "https://tmi.twitch.tv/group/user/CHANNELNAME/chatters" | awk '/viewers/{y=1;next}y' | sed -n '/]/q;p' | wc -l
+
 Retrieve latest follower from a channel:
 $curl -s https://decapi.me/twitch/followers?channel=CHANNELNAME
 
@@ -15,7 +18,7 @@ Subscriber count:
 $curl -s https://decapi.me/twitch/subcount?channel=CHANNELNAME
 
 Uptime:
-curl -s https://decapi.me/twitch/uptime?channel=CHANNELNAME
+$curl -s https://decapi.me/twitch/uptime?channel=CHANNELNAME
 
 Gets the latest highlight title and URL if exists:
-curl -s https://decapi.me/twitch/hightlight?channel=CHANNELNAME
+$curl -s https://decapi.me/twitch/hightlight?channel=CHANNELNAME
