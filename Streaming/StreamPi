@@ -22,6 +22,7 @@
 #folder pathways. "$DIR" would return "/path/to/folder/script/is/in/"
 #
 #####[Variables - Default/Starting place]#####
+FFMPEG=/usr/bin/ffmpeg #I did this because some people download precompiled versions
 RTMP="$1" #Change and use "rtmp://..." URL to store Twitch RTMP in the script otherwise, 
 #..........you'll have to use "/path/to/StreamPi [rtmp://...]" each time. You can also
 #..........use /path/to/StreamPi [file.flv] to screen-record to a local FLV file.
@@ -104,7 +105,7 @@ then
         if [ "$SYSTEMTYPE" = "x86_64" ] #Cancels the scaling and CRF value of 1 for x86_64 computers
         then
             convert "$IMAGEOVERLAY" -resize $SCREENWIDTH'x'$SCREENHEIGHT\! temp_IMAGEOVERLAY.png #Copies and converts overlay image to fit the screen size.
-            ffmpeg -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
+            "$FFMPEG" -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
             -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
             -filter_complex "[0:v][1:v] overlay=0:0" -pix_fmt yuv420p -c:v libx264 -x264-params "nal-hdr=cbr" -c:a aac -b:a 96k -ar 44100 \
             -crf $QUALITY -preset medium \
@@ -112,7 +113,7 @@ then
             -threads 0 "$1"
         else #If screen is > 720p but are using ARM or i686 and older then scale
             convert "$IMAGEOVERLAY" -resize 1280x720\! temp_IMAGEOVERLAY.png #Copies and converts overlay image to fit as 1280x720
-            ffmpeg -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
+            "$FFMPEG" -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
             -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
             -filter_complex "[0]scale=1280:720,overlay=0:0" -pix_fmt yuv420p -c:v libx264 -x264-params "nal-hdr=cbr" -c:a aac -b:a 96k -ar 44100 \
             -crf $QUALITY -preset ultrafast \
@@ -121,7 +122,7 @@ then
         fi
     else #If screen is equal to or below 720p, no matter what the architecture, use this...
         convert "$IMAGEOVERLAY" -resize $SCREENWIDTH'x'$SCREENHEIGHT\! temp_IMAGEOVERLAY.png #Copies and converts overlay image to fit the screen size.
-        ffmpeg -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
+        "$FFMPEG" -vsync 0 -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -i "temp_IMAGEOVERLAY.png" \
         -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
         -filter_complex "[0:v][1:v] overlay=0:0" -pix_fmt yuv420p -c:v libx264 -x264-params "nal-hdr=cbr" -c:a aac -b:a 96k -ar 44100 \
         -crf $QUALITY -preset ultrafast \
@@ -133,20 +134,20 @@ else #If you don't have an overlay
     then
         if [ "$SYSTEMTYPE" = "x86_64" ] #Cancels the scaling and CRF value of 1 for x86_64 computers
         then
-            ffmpeg -vsync 0 -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+            "$FFMPEG" -vsync 0 -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
             -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
             -crf $QUALITY -preset medium -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
             -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
             -threads 0 "$1"
         else #If screen is > 720p but are using ARM or i686 and older then scale
-            ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+            "$FFMPEG" -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
             -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
             -crf $QUALITY -preset ultrafast -vf "scale=$SCALE:-1,format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
             -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
             -threads 0 "$1"
         fi
     else #If screen is equal to or below 720p, no matter what the architecture, use this...
-        ffmpeg -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
+        "$FFMPEG" -f $SOUNDSERVER -thread_queue_size $THREAD_QUEUE -ac 2 -i default \
         -f x11grab -video_size $SCREENWIDTH'x'$SCREENHEIGHT -i $DISPLAY+$ANTI_LEFT_PANEL,$ANTI_TOP_PANEL -c:v libx264 -x264-params "nal-hdr=cbr" \
         -crf $QUALITY -preset ultrafast -vf "format=yuv420p" -c:a aac -b:a 96k -ar 44100 \
         -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M -f flv -movflags +faststart -profile:v baseline -level 3.0 \
